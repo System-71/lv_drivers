@@ -14,10 +14,10 @@ extern "C" {
  *      INCLUDES
  *********************/
 #ifndef LV_DRV_NO_CONF
-#ifdef LV_CONF_INCLUDE_SIMPLE
+#ifndef LV_CONF_INCLUDE_SIMPLE
 #include "lv_drv_conf.h"
 #else
-#include "../../lv_drv_conf.h"
+#include "../lv_drv_conf.h"
 #endif
 #endif
 
@@ -26,12 +26,14 @@ extern "C" {
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
 #include "lvgl.h"
 #else
-#include "lvgl/lvgl.h"
+#include "../lvgl/lvgl.h"
 #endif
 
 /*********************
  *      DEFINES
  *********************/
+
+#define FBDEV_FLIP
 
 /**********************
  *      TYPEDEFS

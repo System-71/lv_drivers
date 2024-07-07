@@ -189,6 +189,12 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
     int32_t act_x2 = area->x2 > (int32_t)vinfo.xres - 1 ? (int32_t)vinfo.xres - 1 : area->x2;
     int32_t act_y2 = area->y2 > (int32_t)vinfo.yres - 1 ? (int32_t)vinfo.yres - 1 : area->y2;
 
+#ifdef FBDEV_FLIP
+    act_x1 = (int32_t)vinfo.xres - area->x1;
+    act_x2 = (int32_t)vinfo.xres - area->x2;
+    act_y1 = (int32_t)vinfo.yres - area->y1;
+    act_y2 = (int32_t)vinfo.yres - area->y2;
+#endif
 
     lv_coord_t w = (act_x2 - act_x1 + 1);
     long int location = 0;

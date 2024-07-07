@@ -26,7 +26,7 @@ extern "C" {
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
 #include "lvgl.h"
 #else
-#include "lvgl/lvgl.h"
+#include "../lvgl/lvgl.h"
 #endif
 
 /*********************
@@ -40,13 +40,12 @@ extern "C" {
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-
-int drm_init(void); /*Deprecated: Use drm_disp_drv_init instead*/
-int drm_disp_drv_init(lv_disp_drv_t * disp_drv);
-void drm_get_sizes(lv_coord_t * width, lv_coord_t * height, uint32_t * dpi);
+void drm_init(void);
+void drm_get_sizes(lv_coord_t *width, lv_coord_t *height, uint32_t *dpi);
 void drm_exit(void);
 void drm_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color_p);
 void drm_wait_vsync(lv_disp_drv_t * drv);
+
 
 /**********************
  *      MACROS
