@@ -194,9 +194,12 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
     act_x2 = (int32_t)vinfo.xres - area->x2;
     act_y1 = (int32_t)vinfo.yres - area->y1;
     act_y2 = (int32_t)vinfo.yres - area->y2;
+
+    lv_coord_t w = (act_x1 - act_x2 + 1);
+#else
+    lv_coord_t w = (act_x2 - act_x1 + 1);
 #endif
 
-    lv_coord_t w = (act_x2 - act_x1 + 1);
     long int location = 0;
     long int byte_location = 0;
     unsigned char bit_location = 0;
@@ -232,9 +235,24 @@ void fbdev_flush(lv_disp_drv_t * drv, const lv_area_t * area, lv_color_t * color
     else if(vinfo.bits_per_pixel == 16) {
         uint16_t * fbp16 = (uint16_t *)fbp;
         int32_t y;
+	uint8_t *src;
+	uint8_t *dst;
+	int n=0;
+#ifdef FBDEV_FLIP
+        for(y = act_y1; y >= act_y2; y--) {
+            location = (act_x2 + vinfo.xoffset) + (y + vinfo.yoffset) * finfo.line_length / 2;
+            n = (act_x1 - act_x2 + 1) * 2;
+	    src = (uint8_t *) color_p;
+	    dst = ((uint8_t *) &fbp16[location]);
+	    for (int i=0; i < n; i++) {
+
+	        dst[n-1-i] = (i % 2 == 1) ? src[i-1] : src[i+1];
+	    }
+#else
         for(y = act_y1; y <= act_y2; y++) {
             location = (act_x1 + vinfo.xoffset) + (y + vinfo.yoffset) * finfo.line_length / 2;
             memcpy(&fbp16[location], (uint32_t *)color_p, (act_x2 - act_x1 + 1) * 2);
+#endif
             color_p += w;
         }
     }
